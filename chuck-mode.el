@@ -60,7 +60,8 @@
 
 (c-lang-defconst c-identifier-ops
   chuck '((left-assoc ".")
-          (right-assoc "::")))
+          (right-assoc "::")
+          (prefix "~")))
 
 (c-lang-defconst c-opt-cpp-symbol
   chuck nil)
@@ -72,30 +73,62 @@
           ">>=>" "<<=>"))
 
 (c-lang-defconst c-primitive-type-kwds
-  chuck '("int" "float" "time" "dur" "void"
-          ;; more obscure stuff
+  chuck '("int" "float" "time" "dur" "void" "same"
           "array" "polar" "complex"
-          ;; not actually primitives
-          "string" "Object" "Event" "UGen"))
+          ;; built-in classes
+          "string" "Object" "Event" "UGen" "UAna" "Shred"
+          ;; Standard libs (TODO: this is not a great place for these)
+          "Std" "Machine" "Math"
+          ;; UGens
+          "SinOsc" "PulseOsc" "SqrOsc" "TriOsc"
+          "SawOsc" "Phasor" "Noise" "Impulse"
+          "Step" "Gain" "SndBuf" "HalfRect"
+          "FullRect" "ZeroX" "Mix2" "Pan2"
+          "GenX" "CurveTable" "WarpTable" "LiSa" 
+          ;; filters
+          "OneZero" "TwoZero" "OnePole" "TwoPole"
+          "PoleZero" "BiQuad" "Filter" "LPF"
+          "HPF" "BPF" "BRF" "ResonZ" "Dyno" 
+          ;; STK UGens
+          "Envelope" "ADSR" "Delay" "DelayA" "DelayL"
+          "Echo" "JCRev" "NRev" "PRCRev" "Chorus"
+          "Modulate" "PitShift" "SubNoise" "Blit"
+          "BlitSaw" "BlitSquare" "WvIn" "WaveLoop"
+          "WvOut"
+          ;; STK instruments
+          "StkInstrument" "BandedWG" "BlowBotl"
+          "BlowHole" "Bowed" "Brass" "Clarinet"
+          "Flute" "Mandolin" "ModalBar" "Moog"
+          "Saxofony" "Shakers" "Sitar" "StifKarp"
+          "VoicForm" "FM" "BeeThree" "FMVoices"
+          "HevyMetl" "PercFlut" "Rhodey"
+          "TubeBell" "Wurley"
+          ;; UAnae
+          "UAnaBlob" "Windowing"
+          "FFT" "IFFT" "DCT" "IDCT"
+          "Centroid" "Flux" "RMS" "RollOff"
+          ))
 
 (c-lang-defconst c-class-decl-kwds
   chuck '("class"))
 
 (c-lang-defconst c-typeless-decl-kwds
-  chuck '("fun" "const"))
+  chuck '("fun" "function" "const"))
 
 (c-lang-defconst c-modifier-kwds
-  chuck '("public" "static"))
+  chuck '("public" "static" "pure"))
 
 (c-lang-defconst c-postfix-decl-spec-kwds
   chuck '("extends"))
 
+;; Statement keywords followed directly by a block
 (c-lang-defconst c-block-stmt-1-kwds
   chuck '("else"))
 
 (c-lang-defconst c-block-stmt-2-kwds
-  chuck '("for" "if" "while"))
+  chuck '("for" "if" "while" "switch" "spork" "new"))
 
+;; Statement keywords followed by an expression or nothing
 (c-lang-defconst c-simple-stmt-kwds
   chuck '("break" "continue" "return"))
 
@@ -103,7 +136,7 @@
   chuck nil)
 
 (c-lang-defconst c-constant-kwds
-  chuck '("null" "true" "false"
+  chuck '("null" "NULL" "true" "false" "maybe"
           "now" "me" "pi"
           "dac" "adc" "blackhole"
           ;; not really constants...
