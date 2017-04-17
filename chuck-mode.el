@@ -58,10 +58,19 @@
 (c-lang-defconst c-symbol-chars
   chuck (concat c-alnum "_"))
 
+;; ~ isn't classified as an identifier in cc-mode, but it is in chuck.
+(c-lang-defconst c-identifier-syntax-modifications
+  chuck (append '((?~ . "w"))
+                (c-lang-const c-identifier-syntax-modifications)))
+
 (c-lang-defconst c-identifier-ops
   chuck '((left-assoc ".")
           (right-assoc "::")
+          (prefix "::")
           (prefix "~")))
+
+(c-lang-defconst c-after-id-concat-ops
+  chuck nil)
 
 (c-lang-defconst c-opt-cpp-symbol
   chuck nil)
@@ -141,6 +150,22 @@
           "dac" "adc" "blackhole"
           ;; not really constants...
           "samp" "ms" "second" "minute" "hour" "day" "week"))
+
+;; highlight special chuck operators
+(defface font-lock-operators-face
+  '((t :inherit font-lock-constant-face))
+  "Face for highlighting special chuck operators."
+  :group 'basic-faces)
+(set-face-foreground 'font-lock-operators-face "blue")
+
+(defconst highlight-operators-regexp
+  (rx (and
+       symbol-start
+       (or "~" "$")
+       symbol-end)))
+
+(font-lock-add-keywords 'chuck-mode
+                        `((,highlight-operators-regexp . 'font-lock-operators-face)))
 
 ;;; font-locking voodoo
 
